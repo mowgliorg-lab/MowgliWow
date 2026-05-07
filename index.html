@@ -2,98 +2,195 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Live Chaos Globe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
   <style>
-    body { margin: 0; overflow: hidden; background: black; }
+    * { margin: 0; padding: 0; border: 0; box-sizing: border-box; }
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      background: #000;
+      cursor: pointer;
+    }
     h1 {
       position: absolute;
-      top: 10%; /* headline moved upward */
+      top: 11%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 3em;
-      color: white;
-      text-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
-      animation: glow 2s infinite alternate;
-      z-index: 10;
+      font-size: clamp(0.8rem, 2.7vw, 2.1rem);
+      font-weight: 100;
+      letter-spacing: 17px;
+      color: rgba(255,255,255,0.55);
+      text-shadow: 0 0 6px #d30808, 0 0 12px #ff0303;
+      animation: breathe 9s infinite alternate ease-in-out;
+      z-index: 100;
+      user-select: none;
+      text-transform: uppercase;
     }
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff; }
-      to { text-shadow: 0 0 40px #ffff00, 0 0 60px #ff0000; }
+    @keyframes breathe {
+      0% { opacity: 0.5; }
+      100% { opacity: 0.95; }
     }
   </style>
 </head>
 <body>
-  <h1>Heelow Wellcom to the Chaos</h1>
+
+  <h1>Wellcome to Loop Hole Your Machine has Been Compromized</h1>
+  
+  <audio id="hypnosound" loop preload="auto">
+    <source src="Sultan Mowgli Shah.mp3" type="audio/mpeg">
+  </audio>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
-    const renderer = new THREE.WebGLRenderer({antialias:true});
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({antialias:true, alpha: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     document.body.appendChild(renderer.domElement);
 
-    // Lighting: simulates the Sun
-    const ambientLight = new THREE.AmbientLight(0x222222);
-    scene.add(ambientLight);
-    const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    sunLight.position.set(5,3,5);
-    scene.add(sunLight);
-
-    // Load textures
     const loader = new THREE.TextureLoader();
-    const earthDay = loader.load("https://raw.githubusercontent.com/trevorjayjones/earth-textures/main/earthmap1k.jpg");
-    const earthNight = loader.load("https://raw.githubusercontent.com/trevorjayjones/earth-textures/main/earthlights1k.jpg");
-    const bumpMap = loader.load("https://raw.githubusercontent.com/trevorjayjones/earth-textures/main/earthbump1k.jpg");
-    const cloudsTexture = loader.load("https://raw.githubusercontent.com/trevorjayjones/earth-textures/main/earthclouds.png");
+    const kingTexture = loader.load("The King.jpeg");
+    kingTexture.colorSpace = THREE.SRGBColorSpace;
 
-    // Earth globe with day/night blending
-    const earthGeometry = new THREE.SphereGeometry(2, 64, 64);
-    const earthMaterial = new THREE.MeshPhongMaterial({
-      map: earthDay,
-      bumpMap: bumpMap,
-      bumpScale: 0.05,
-      emissiveMap: earthNight, // city lights at night
-      emissive: new THREE.Color(0xffffff),
-      emissiveIntensity: 0.6
-    });
-    const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-    scene.add(earth);
-
-    // Clouds layer
-    const cloudGeometry = new THREE.SphereGeometry(2.03, 64, 64);
-    const cloudMaterial = new THREE.MeshPhongMaterial({
-      map: cloudsTexture,
+    // Your image perfectly inside circle
+    const kingGeometry = new THREE.CircleGeometry(2.2, 128);
+    const kingMaterial = new THREE.MeshBasicMaterial({
+      map: kingTexture,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.72
     });
-    const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
-    scene.add(clouds);
+    const portrait = new THREE.Mesh(kingGeometry, kingMaterial);
+    scene.add(portrait);
 
-    // Starfield
+    // Perfect glow ring
+    const ringGeometry = new THREE.RingGeometry(2.2, 2.35, 128);
+    const ringMaterial = new THREE.ShaderMaterial({
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        uniform float time;
+        void main() {
+          float edge = smoothstep(0.0, 0.04, abs(vUv.x - 0.5));
+          float glow = 0.4 + 0.6 * sin(time * 0.6 + vUv.x * 14.0);
+          gl_FragColor = vec4(0.2, 0.4, 1.0, edge * glow * 0.7);
+        }
+      `,
+      uniforms: { time: { value: 0 } },
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    });
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    scene.add(ring);
+
+    // Clean starfield
     const starGeometry = new THREE.BufferGeometry();
-    const starCount = 5000;
+    const starCount = 12000;
     const starVertices = [];
     for (let i = 0; i < starCount; i++) {
-      const x = (Math.random() - 0.5) * 4000;
-      const y = (Math.random() - 0.5) * 4000;
-      const z = (Math.random() - 0.5) * 4000;
-      starVertices.push(x,y,z);
+      starVertices.push(
+        (Math.random() - 0.5) * 600,
+        (Math.random() - 0.5) * 600,
+        (Math.random() - 0.5) * 600
+      );
     }
     starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7 });
+    const starMaterial = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.35,
+      transparent: true,
+      opacity: 0.7
+    });
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
 
-    camera.position.z = 8;
+    camera.position.z = 8.3;
+    let time = 0;
+    
+    // ✨ THUNDER & SNOW SYSTEM
+    const snowflakes = [];
+    const snowCount = 6000;
+    for(let i = 0; i < snowCount; i++) {
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute([0,0,0], 3));
+      const mat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.07 + Math.random() * 0.11,
+        transparent: true,
+        opacity: 0.6 + Math.random() * 0.4
+      });
+      const snow = new THREE.Points(geo, mat);
+      snow.position.set(
+        (Math.random() - 0.5) * 50,
+        (Math.random() - 0.5) * 40,
+        (Math.random() - 0.5) * 25
+      );
+      snow.userData.speed = 0.015 + Math.random() * 0.025;
+      snow.userData.drift = (Math.random() - 0.5) * 0.007;
+      snowflakes.push(snow);
+      scene.add(snow);
+    }
 
-    // Animate
+    // Audio Engine
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const audioElement = document.getElementById('hypnosound');
+    const audioSource = audioCtx.createMediaElementSource(audioElement);
+    const analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.93;
+    audioSource.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+
+    const unlockAudio = () => {
+      audioCtx.resume();
+      audioElement.play().catch(() => {});
+      document.removeEventListener('click', unlockAudio);
+    };
+    document.addEventListener('click', unlockAudio);
+
+    // Perfect Clean Animation
     function animate() {
       requestAnimationFrame(animate);
-      earth.rotation.y += 0.001; // slow Earth rotation
-      clouds.rotation.y += 0.0015; // clouds drift
-      stars.rotation.y += 0.0002; // subtle star drift
+      time += 0.016;
+      
+      ringMaterial.uniforms.time.value = time;
+      stars.rotation.y += 0.00007;
+      
+      // Thunder flash
+      if(Math.random() < 0.003) {
+        renderer.setClearColor(0xffffff, 0.7);
+        setTimeout(() => renderer.setClearColor(0x000000, 1), 25);
+      }
+      
+      // Heavy snowfall
+      snowflakes.forEach(snow => {
+        snow.position.y -= snow.userData.speed;
+        snow.position.x += snow.userData.drift + Math.sin(time * 2 + snow.position.z) * 0.003;
+        
+        if(snow.position.y < -20) {
+          snow.position.y = 20;
+          snow.position.x = (Math.random() - 0.5) * 50;
+        }
+      });
+
+      analyser.getByteFrequencyData(frequencyData);
+      const bassLevel = frequencyData.slice(0, 15).reduce((a,b) => a+b, 0) / (15 * 255);
+      
+      portrait.scale.setScalar(1 + bassLevel * 0.013);
+      ring.scale.setScalar(1 + bassLevel * 0.021);
+
       renderer.render(scene, camera);
     }
+    
     animate();
 
     window.addEventListener('resize', () => {
