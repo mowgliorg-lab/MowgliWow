@@ -1,203 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome</title>
-  <style>
-    * { margin: 0; padding: 0; border: 0; box-sizing: border-box; }
-    body { 
-      margin: 0; 
-      overflow: hidden; 
-      background: #000;
-      cursor: pointer;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Extremely Perfect Mysterious Page</title>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family: 'Courier New', monospace;
     }
-    h1 {
-      position: absolute;
-      top: 11%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: clamp(0.8rem, 2.7vw, 2.1rem);
-      font-weight: 100;
-      letter-spacing: 17px;
-      color: rgba(255,255,255,0.55);
-      text-shadow: 0 0 6px #d30808, 0 0 12px #ff0303;
-      animation: breathe 9s infinite alternate ease-in-out;
-      z-index: 100;
-      user-select: none;
-      text-transform: uppercase;
+
+    body{
+        overflow:hidden;
+        height:100vh;
+        background:black;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        position:relative;
+        color: white;
     }
-    @keyframes breathe {
-      0% { opacity: 0.5; }
-      100% { opacity: 0.95; }
+
+    /* Background Smoke */
+    .smoke{
+        position:absolute;
+        width:200%;
+        height:200%;
+        background:radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+        animation:smokeMove 12s linear infinite;
+        opacity:0.5;
     }
-  </style>
+
+    @keyframes smokeMove{
+        0%{ transform:translate(-10%, -10%) rotate(0deg);}
+        100%{ transform:translate(10%, 10%) rotate(360deg);}
+    }
+
+    /* Fading Light */
+    .light{
+        position:absolute;
+        width:500px;
+        height:500px;
+        background:radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+        border-radius:50%;
+        animation:flicker 3s infinite alternate;
+    }
+
+    @keyframes flicker{
+        0%{opacity:0.2;}
+        25%{opacity:0.5;}
+        50%{opacity:0.1;}
+        75%{opacity:0.4;}
+        100%{opacity:0.2;}
+    }
+
+    /* Matrix Code Rain */
+    .matrix-canvas{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        z-index:-2;
+        opacity:0.35;
+        pointer-events:none;
+    }
+
+    /* Anonymous Boy */
+    .boy{
+        position:absolute;
+        right:8%;
+        bottom:80px;
+        width:180px;
+        height:220px;
+    }
+
+    .hood{
+        position:absolute;
+        width:120px;
+        height:140px;
+        background:#111;
+        border-radius:60px 60px 40px 40px;
+        left:30px;
+        top:0;
+    }
+
+    .face{
+        position:absolute;
+        width:70px;
+        height:70px;
+        background:#000;
+        border-radius:50%;
+        left:55px;
+        top:40px;
+        box-shadow:0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .body{
+        position:absolute;
+        width:160px;
+        height:120px;
+        background:#0b0b0b;
+        border-radius:20px;
+        bottom:0;
+        left:10px;
+    }
+
+    /* Laptop */
+    .laptop{
+        position:absolute;
+        width:140px;
+        height:15px;
+        background:#222;
+        bottom:30px;
+        left:20px;
+        transform:rotate(-5deg);
+        box-shadow:0 0 20px rgba(0,255,255,0.3);
+    }
+
+    .screen{
+        position:absolute;
+        width:110px;
+        height:70px;
+        background:#021;
+        border:2px solid #0ff;
+        bottom:45px;
+        left:35px;
+        animation:screenGlow 2s infinite alternate;
+    }
+
+    @keyframes screenGlow{
+        0%{ box-shadow:0 0 5px #0ff;}
+        100%{ box-shadow:0 0 25px #0ff;}
+    }
+
+    /* Typing Effect */
+    .typing{
+        position:absolute;
+        top:10px;
+        left:10px;
+        color:#0f0;
+        font-size:10px;
+        letter-spacing:2px;
+        animation:typing 3s infinite;
+        white-space:nowrap;
+        overflow:hidden;
+        width:0;
+    }
+
+    @keyframes typing{
+        0%{width:0;}
+        50%{width:90px;}
+        100%{width:0;}
+    }
+
+    /* Suspense Text */
+    .title{
+        position:absolute;
+        top:8%;
+        color:white;
+        font-size:42px;
+        letter-spacing:8px;
+        text-transform:uppercase;
+        text-shadow:0 0 20px rgba(255,255,255,0.5);
+        animation:fadeText 4s infinite;
+    }
+
+    @keyframes fadeText{
+        0%{opacity:0.2;}
+        50%{opacity:1;}
+        100%{opacity:0.2;}
+    }
+
+    /* Floating Dust */
+    .dust{
+        position:absolute;
+        width:3px;
+        height:3px;
+        background:white;
+        border-radius:50%;
+        opacity:0.3;
+        animation:float 10s linear infinite;
+    }
+
+    @keyframes float{
+        from{
+            transform:translateY(100vh);
+        }
+        to{
+            transform:translateY(-100vh);
+        }
+    }
+
+    /* Wolf Image */
+    .wolf{
+        position:absolute;
+        left:5%;
+        bottom:100px;
+        width:200px;
+        height:auto;
+        opacity:0.7;
+        filter:blur(1px) grayscale(50%);
+        animation:fadeIn 10s infinite alternate;
+    }
+
+    @keyframes fadeIn{
+        0%{opacity:0.3;}
+        100%{opacity:0.8;}
+    }
+
+    /* King Image */
+    .king{
+        position:absolute;
+        top:10%;
+        left:50%;
+        transform:translateX(-50%);
+        width:300px;
+        height:auto;
+        opacity:0.5;
+        filter:blur(2px) grayscale(70%);
+        z-index:-1;
+        animation:pulse 8s infinite;
+    }
+
+    @keyframes pulse{
+        0%{opacity:0.3;}
+        50%{opacity:0.7;}
+        100%{opacity:0.3;}
+    }
+
+    /* Initial Text */
+    .initial-text{
+        position:absolute;
+        top:20%;
+        left:50%;
+        transform:translateX(-50%);
+        text-align:center;
+        font-size:18px;
+        opacity:1;
+        animation:fadeOut 5s forwards;
+    }
+
+    @keyframes fadeOut{
+        0%{opacity:1;}
+        100%{opacity:0; display:none;}
+    }
+
+    /* Shock Element */
+    .shock{
+        position:fixed;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        color:red;
+        font-size:48px;
+        opacity:0;
+        animation:shockAnim 1s infinite;
+        animation-delay:5s;
+        animation-fill-mode:forwards;
+    }
+
+    @keyframes shockAnim{
+        0%{opacity:0;}
+        50%{opacity:1;}
+        100%{opacity:0;}
+    }
+
+</style>
 </head>
+
 <body>
 
-  <h1>Wellcome to Loop Hole Your Machine has Been Compromized</h1>
-  
-  <audio id="hypnosound" loop preload="auto">
-    <source src="Sultan Mowgli Shah.mp3" type="audio/mpeg">
-  </audio>
+<canvas class="matrix-canvas"></canvas>
+<div class="smoke"></div>
+<div class="light"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script>
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({antialias:true, alpha: true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    document.body.appendChild(renderer.domElement);
+<h1 class="title">Unknown Presence</h1>
 
-    const loader = new THREE.TextureLoader();
-    const kingTexture = loader.load("The King.jpeg");
-    kingTexture.colorSpace = THREE.SRGBColorSpace;
+<!-- The King Image -->
+<img class="king" src="The King.jpeg" alt="The King">
 
-    // Your image perfectly inside circle
-    const kingGeometry = new THREE.CircleGeometry(2.2, 128);
-    const kingMaterial = new THREE.MeshBasicMaterial({
-      map: kingTexture,
-      transparent: true,
-      opacity: 0.72
-    });
-    const portrait = new THREE.Mesh(kingGeometry, kingMaterial);
-    scene.add(portrait);
+<div class="initial-text">
+    <p>In the shadows, an anonymous figure sits cloaked in a hoodie, fingers dancing on a laptop keys...</p>
+    <p>What secrets does this page hold? Stare into the void, and feel the chill creep in.</p>
+</div>
 
-    // Perfect glow ring
-    const ringGeometry = new THREE.RingGeometry(2.2, 2.35, 128);
-    const ringMaterial = new THREE.ShaderMaterial({
-      vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec2 vUv;
-        uniform float time;
-        void main() {
-          float edge = smoothstep(0.0, 0.04, abs(vUv.x - 0.5));
-          float glow = 0.4 + 0.6 * sin(time * 0.6 + vUv.x * 14.0);
-          gl_FragColor = vec4(0.2, 0.4, 1.0, edge * glow * 0.7);
-        }
-      `,
-      uniforms: { time: { value: 0 } },
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      side: THREE.DoubleSide
-    });
-    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-    scene.add(ring);
+<div class="shock">YOU'RE NOT ALONE!</div>
 
-    // Clean starfield
-    const starGeometry = new THREE.BufferGeometry();
-    const starCount = 12000;
-    const starVertices = [];
-    for (let i = 0; i < starCount; i++) {
-      starVertices.push(
-        (Math.random() - 0.5) * 600,
-        (Math.random() - 0.5) * 600,
-        (Math.random() - 0.5) * 600
-      );
-    }
-    starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-    const starMaterial = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.35,
-      transparent: true,
-      opacity: 0.7
-    });
-    const stars = new THREE.Points(starGeometry, starMaterial);
-    scene.add(stars);
+<!-- Anonymous Boy -->
+<div class="boy">
+    <div class="hood"></div>
+    <div class="face"></div>
+    <div class="body"></div>
 
-    camera.position.z = 8.3;
-    let time = 0;
-    
-    // ✨ THUNDER & SNOW SYSTEM
-    const snowflakes = [];
-    const snowCount = 6000;
-    for(let i = 0; i < snowCount; i++) {
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.Float32BufferAttribute([0,0,0], 3));
-      const mat = new THREE.PointsMaterial({
-        color: 0xffffff,
-        size: 0.07 + Math.random() * 0.11,
-        transparent: true,
-        opacity: 0.6 + Math.random() * 0.4
-      });
-      const snow = new THREE.Points(geo, mat);
-      snow.position.set(
-        (Math.random() - 0.5) * 50,
-        (Math.random() - 0.5) * 40,
-        (Math.random() - 0.5) * 25
-      );
-      snow.userData.speed = 0.015 + Math.random() * 0.025;
-      snow.userData.drift = (Math.random() - 0.5) * 0.007;
-      snowflakes.push(snow);
-      scene.add(snow);
+    <div class="screen">
+        <div class="typing">ACCESSING...</div>
+    </div>
+
+    <div class="laptop"></div>
+</div>
+
+<!-- Mysterious Wolf -->
+<img class="wolf" src="Wolf.avif" alt="Mysterious Wolf">
+
+<!-- Dust Particles -->
+<div class="dust" style="left:10%; animation-duration:8s;"></div>
+<div class="dust" style="left:25%; animation-duration:11s;"></div>
+<div class="dust" style="left:40%; animation-duration:9s;"></div>
+<div class="dust" style="left:55%; animation-duration:13s;"></div>
+<div class="dust" style="left:70%; animation-duration:7s;"></div>
+<div class="dust" style="left:85%; animation-duration:10s;"></div>
+
+<!-- Background Sound -->
+<audio autoplay loop>
+    <source src="bot kak.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const canvas = document.querySelector('.matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    const letters = '01abcXYZ$%^&*<>?!@#';
+    const fontSize = 16;
+    let columns = 0;
+    let drops = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        columns = Math.floor(canvas.width / fontSize);
+        drops = Array(columns).fill(0);
     }
 
-    // Audio Engine
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const audioElement = document.getElementById('hypnosound');
-    const audioSource = audioCtx.createMediaElementSource(audioElement);
-    const analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 256;
-    analyser.smoothingTimeConstant = 0.93;
-    audioSource.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0f0';
+        ctx.font = `${fontSize}px monospace`;
 
-    const unlockAudio = () => {
-      audioCtx.resume();
-      audioElement.play().catch(() => {});
-      document.removeEventListener('click', unlockAudio);
-    };
-    document.addEventListener('click', unlockAudio);
+        drops.forEach((y, index) => {
+            const text = letters.charAt(Math.floor(Math.random() * letters.length));
+            const x = index * fontSize;
+            ctx.fillText(text, x, y * fontSize);
+            if (y * fontSize > canvas.height && Math.random() > 0.98) {
+                drops[index] = 0;
+            } else {
+                drops[index] = y + 0.5;
+            }
+        });
 
-    // Perfect Clean Animation
-    function animate() {
-      requestAnimationFrame(animate);
-      time += 0.016;
-      
-      ringMaterial.uniforms.time.value = time;
-      stars.rotation.y += 0.00007;
-      
-      // Thunder flash
-      if(Math.random() < 0.003) {
-        renderer.setClearColor(0xffffff, 0.7);
-        setTimeout(() => renderer.setClearColor(0x000000, 1), 25);
-      }
-      
-      // Heavy snowfall
-      snowflakes.forEach(snow => {
-        snow.position.y -= snow.userData.speed;
-        snow.position.x += snow.userData.drift + Math.sin(time * 2 + snow.position.z) * 0.003;
-        
-        if(snow.position.y < -20) {
-          snow.position.y = 20;
-          snow.position.x = (Math.random() - 0.5) * 50;
-        }
-      });
-
-      analyser.getByteFrequencyData(frequencyData);
-      const bassLevel = frequencyData.slice(0, 15).reduce((a,b) => a+b, 0) / (15 * 255);
-      
-      portrait.scale.setScalar(1 + bassLevel * 0.013);
-      ring.scale.setScalar(1 + bassLevel * 0.021);
-
-      renderer.render(scene, camera);
+        requestAnimationFrame(drawMatrix);
     }
-    
-    animate();
 
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    drawMatrix();
+</script>
+
 </body>
 </html>
